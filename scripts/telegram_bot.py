@@ -1,4 +1,3 @@
-
 import asyncio
 import os
 import sys
@@ -12,6 +11,7 @@ import random
 import time
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import threading
+from pathlib import Path
 
 
 
@@ -85,8 +85,9 @@ async def greeting(message: types.Message):
 '''
     global name_player
     name_player = message.from_user.username
-    gif = FSInputFile(r"C:\Users\valera\Desktop\bot\GIF\The main character.mp4")
-
+    gif_path = Path(__file__).parent.parent / "GIF" / "The main character.mp4"
+    gif = FSInputFile(gif_path)
+    
     builder = InlineKeyboardBuilder()
     builder.add(
         types.InlineKeyboardButton(text="⚔️ Идти в бой", callback_data="boss_room_select"),
@@ -931,7 +932,7 @@ async def handle_training(callback: types.CallbackQuery):
 
         # Получаем имя файла
         image_name = question_images.get(question_data['question'], 'default.jpg')
-        image_path = fr"C:\Users\valera\Desktop\bot\photos for questions\{image_name}"
+        image_path = Path(__file__).parent.parent / "photos for questions" / image_name
 
         # Проверяем существование файла
         if os.path.exists(image_path):
@@ -1035,11 +1036,14 @@ async def handle_back(callback: types.CallbackQuery):
 
     # Определяем гифку в зависимости от количества побежденных боссов
     if player.count_boss >= 2:
-        gif = FSInputFile(r"C:\Users\valera\Desktop\bot\GIF\Base 3.mp4")
+        gif_path = Path(__file__).parent.parent / "GIF" / "Base 3.mp4"
+        gif = FSInputFile(gif_path)
     elif player.count_boss >= 1:
-        gif = FSInputFile(r"C:\Users\valera\Desktop\bot\GIF\Base 2.mp4")
+        gif_path = Path(__file__).parent.parent / "GIF" / "Base 2.mp4"
+        gif = FSInputFile(gif_path)
     else:
-        gif = FSInputFile(r"C:\Users\valera\Desktop\bot\GIF\Base 1.mp4")
+        gif_path = Path(__file__).parent.parent / "GIF" / "Base 1.mp4"
+        gif = FSInputFile(gif_path)
 
     builder = InlineKeyboardBuilder()
     builder.add(
@@ -1102,7 +1106,8 @@ async def handle_train_room(callback: types.CallbackQuery):
 Текущий уровень урона: {player.damage} ⚔️
 Текущий уровень здоровья: {player.health} ❤️
 '''
-    gif = FSInputFile(r"C:\Users\valera\Desktop\bot\GIF\Gym.mp4")
+    gif_path = Path(__file__).parent.parent / "GIF" / "Gym.mp4"
+    gif = FSInputFile(gif_path)
     builder = InlineKeyboardBuilder()
     builder.add(
         types.InlineKeyboardButton(text="💪 Начать тренировку", callback_data="train"),
@@ -1154,8 +1159,8 @@ async def boss_room_select(callback: types.CallbackQuery):
         name_boss = 'HAMMER-OMEGA\nSPIDER-4\nINQUISITOR'
 
     if player.count_boss == 0:
-        gif = FSInputFile(r"C:\Users\valera\Desktop\bot\GIF\Gate to 1 boss.mp4")
-        boss_callback = "boss1_hello"
+        gif_path = Path(__file__).parent.parent / "GIF" / "Gate to 1 boss.mp4"
+        gif = FSInputFile(gif_path)
         caption =f'''
 Ты у входа на территорию <b>Инквизиторов</b>. 👊🏼🤖👊🏼
 
@@ -1194,8 +1199,8 @@ async def boss_room_select(callback: types.CallbackQuery):
         builder.adjust(2)
 
     elif player.count_boss == 1:
-        gif = FSInputFile(r"C:\Users\valera\Desktop\bot\GIF\Gate to 2 boss.mp4")
-        boss_callback = "boss2_hello"
+        gif_path = Path(__file__).parent.parent / "GIF" / "Gate to 2 boss.mp4"
+        gif = FSInputFile(gif_path)
         caption=f'''
 Ты у входа на территорию <b>SPIDER-4</b>. 🕸🕷
 
@@ -1232,7 +1237,8 @@ async def boss_room_select(callback: types.CallbackQuery):
         builder.adjust(2)
 
     elif player.count_boss == 2:
-        gif = FSInputFile(r"C:\Users\valera\Desktop\bot\GIF\Gate to 3 boss.mp4")
+        gif_path = Path(__file__).parent.parent / "GIF" / "Gate to 3 boss.mp4"
+        gif = FSInputFile(gif_path)
         boss_callback = "boss3_hello"
         caption=f'''
 Ты у входа на территорию <b>INQUISITOR</b>. ⛩️⚔
@@ -1343,7 +1349,8 @@ async def boss2_hello(callback: types.CallbackQuery):
 
     boss_health = player.damage * 10  # Вместо 150
 
-    gif = FSInputFile(r"C:\Users\valera\Desktop\bot\GIF\Boss 2.mp4")
+    gif_path = Path(__file__).parent.parent / "GIF" / "Boss 2.mp4"
+    gif = FSInputFile(gif_path)
     caption =f'''
 <b>Я — SPIDER-4</b>🕷🕸.
 
@@ -1413,7 +1420,8 @@ async def boss1_hello(callback: types.CallbackQuery):
 
     boss_health = player.damage * 5
 
-    gif = FSInputFile(r"C:\Users\valera\Desktop\bot\GIF\Boss 1.mp4")
+    gif_path = Path(__file__).parent.parent / "GIF" / "Boss 1.mp4"
+    gif = FSInputFile(gif_path)
     caption = f'''
 Я — <b>HAMMER-OMEGA</b> 👊🏼🤖👊🏼
 
@@ -1480,7 +1488,8 @@ async def boss3_hello(callback: types.CallbackQuery):
 
     boss_health = player.damage * 15  # Вместо 250
 
-    gif = FSInputFile(r"C:\Users\valera\Desktop\bot\GIF\Boss 3.mp4")
+    gif_path = Path(__file__).parent.parent / "GIF" / "Boss 3.mp4"
+    gif = FSInputFile(gif_path)
     caption =f'''
 <b>Я — INQUISITOR</b>𓆩✧︎𓆪
 
@@ -1700,11 +1709,14 @@ async def boss_callback_answers(callback: types.CallbackQuery):
         if is_correct:
             player.current_boss = boss_name
             if player.current_boss == "HAMMER-OMEGA":
-                gif = FSInputFile(r"C:\Users\valera\Desktop\bot\GIF\Boss 1 is beaten.mp4")
+                gif_path = Path(__file__).parent.parent / "GIF" / "Boss 1 is beaten.mp4"
+                gif = FSInputFile(gif_path)
             elif player.current_boss == "SPIDER-4":
-                gif = FSInputFile(r"C:\Users\valera\Desktop\bot\GIF\Boss 2 is beaten.mp4")
+                gif_path = Path(__file__).parent.parent / "GIF" / "Boss 2 is beaten.mp4"
+                gif = FSInputFile(gif_path)
             elif player.current_boss == "INQUISITOR":
-                gif = FSInputFile(r"C:\Users\valera\Desktop\bot\GIF\Boss 3 is beaten.mp4")
+                gif_path = Path(__file__).parent.parent / "GIF" / "Boss 3 is beaten.mp4"
+                gif = FSInputFile(gif_path)
 
             player.boss_current_healths[boss_name] -= damage_dealt
             random_exclamation = random.choice(boss_exclamations)
@@ -1731,11 +1743,14 @@ async def boss_callback_answers(callback: types.CallbackQuery):
             # Обработка неправильного ответа
             player.current_boss = boss_name 
             if player.current_boss == "HAMMER-OMEGA":
-                gif = FSInputFile(r"C:\Users\valera\Desktop\bot\GIF\Boss 1 hits.mp4")
+                gif_path = Path(__file__).parent.parent / "GIF" / "Boss 1 hits.mp4"
+                gif = FSInputFile(gif_path)
             elif player.current_boss == "SPIDER-4":
-                gif = FSInputFile(r"C:\Users\valera\Desktop\bot\GIF\Boss 2 hits.mp4")
+                gif_path = Path(__file__).parent.parent / "GIF" / "Boss 2 hits.mp4"
+                gif = FSInputFile(gif_path)
             elif player.current_boss == "INQUISITOR":
-                gif = FSInputFile(r"C:\Users\valera\Desktop\bot\GIF\Boss 3 hits.mp4")
+                gif_path = Path(__file__).parent.parent / "GIF" / "Boss 3 hits.mp4"
+                gif = FSInputFile(gif_path)
 
             player.health -= boss_damage
             random_boss_punch = random.choice(boss_pain)
@@ -1765,7 +1780,8 @@ async def boss_callback_answers(callback: types.CallbackQuery):
             
             # Отправляем сообщение о поражении
             try:
-                gif = FSInputFile(r"C:\Users\valera\Desktop\bot\GIF\You've lost.mp4")
+                gif_path = Path(__file__).parent.parent / "GIF" / "You've lost.mp4"
+                gif = FSInputFile(gif_path)
             except:
                 gif = None  # Если фото не загрузилось
             
@@ -1821,7 +1837,8 @@ async def boss_callback_answers(callback: types.CallbackQuery):
 
             if player.count_boss == 1:
                 caption = "🎉 <b>Поздравляю! Ты победил HAMMER-OMEGA!</b>\n"
-                gif= FSInputFile(r"C:\Users\valera\Desktop\bot\GIF\Boss 1 death.mp4")
+                gif_path = Path(__file__).parent.parent / "GIF" / "Boss 1 death.mp4"
+                gif = FSInputFile(gif_path)
                 
 
                 await callback.message.answer_animation(
@@ -1832,7 +1849,8 @@ async def boss_callback_answers(callback: types.CallbackQuery):
                 )
             elif player.count_boss == 2:
                 caption = "🎉 <b>Невероятно! Ты победил SPIDER-4!</b>\n"
-                gif= FSInputFile(r"C:\Users\valera\Desktop\bot\GIF\Boss 2 death.mp4")
+                gif_path = Path(__file__).parent.parent / "GIF" / "Boss 2 death.mp4"
+                gif = FSInputFile(gif_path)
 
                 await callback.message.answer_animation(
                     gif,
@@ -1842,7 +1860,8 @@ async def boss_callback_answers(callback: types.CallbackQuery):
                 )
             else:
                 caption = "🎉 <b>Невероятно! Ты победил INQUISITOR</b>\n"
-                gif= FSInputFile(r"C:\Users\valera\Desktop\bot\GIF\Boss 3 death.mp4")
+                gif_path = Path(__file__).parent.parent / "GIF" / "Boss 3 death.mp4"
+                gif = FSInputFile(gif_path)
 
                 await callback.message.answer_animation(
                     gif,
@@ -1851,7 +1870,8 @@ async def boss_callback_answers(callback: types.CallbackQuery):
                     reply_markup=builder.as_markup()
                 )
 
-                gif= FSInputFile(r"C:\Users\valera\Desktop\bot\GIF\Victory.mp4")
+                gif_path = Path(__file__).parent.parent / "GIF" / "Victory.mp4"
+                gif = FSInputFile(gif_path)
                 caption=f"""
 🎉 <b>Ты победил всех боссов! Игра пройдена!</b>
 
@@ -1996,52 +2016,3 @@ async def main():
 # === 19 Точка входа ===
 if __name__ == '__main__':
     asyncio.run(main())
-
-import asyncio
-from aiogram import Bot, types
-from aiogram.types import InputFile
-from aiogram import Bot, Dispatcher
-from aiogram.types import Message, InputFile
-from aiogram.filters import CommandStart, Command
-from aiogram.types import FSInputFile
-
-bot = Bot(token='7970424106:AAGt_99D7xo52pY8dcRcWrddNQXLhirhYkI')
-dp = Dispatcher()
-
-
-
-@dp.message(CommandStart())
-async def greeting(message: types.Message):
-
-    """
-    Что делает функция:
-        1) Функция приветствует игрока, отправляет фото
-        2) Функция погружает игрока в правила игры
-        
-    Порядок выполнения функции:
-        1) Создается переменная text, в которой хранится приветствие и правила игры
-        2) Создается переменная name_player, в которой мы узнаем юзернейм игрока
-        3) Создается переменная photo с путем к фото
-        4) И с помощью answer_photo все соединяется в одно и отправляется пользователю
-    """
-
-    text = '''Меня зовут Стив.\n
-Я — последний выживший из Сектора 13,
-сейчас Ночной Город балансирует на 
-грани хаоса, «Инквизиторы» - группировка, превращающая людей в биороботов.\n
-Ты — наша последняя надежда.\n
-Твоя задача — дойти в их главно командующее здание и найти центральный узел...'''
-    name_player =  message.from_user.username
-    photo = FSInputFile(r"C:\Users\valera\Desktop\bot\photo\Основной персонаж.jpg")
-    await message.answer_photo(photo, caption=f'Приветствую {name_player}, {text}')
-    
-
-
-
-
-async def main():
-    await dp.start_polling(bot)
-
-if __name__ == '__main__':
-    asyncio.run(main())  # Правильный способ запуска асинхронного кода
-
