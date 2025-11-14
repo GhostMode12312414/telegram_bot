@@ -1159,6 +1159,15 @@ async def boss_room_select(callback: types.CallbackQuery):
         name_boss = 'HAMMER-OMEGA\nSPIDER-4\nINQUISITOR'
 
     if player.count_boss == 0:
+        boss_callback = "boss1_hello"
+    elif player.count_boss == 1:
+        boss_callback = "boss2_hello" 
+    elif player.count_boss == 2:
+        boss_callback = "boss3_hello"
+    else:
+        boss_callback = "no_boss_available"
+
+    if player.count_boss == 0:
         gif_path = Path(__file__).parent.parent / "GIF" / "Gate to 1 boss.mp4"
         gif = FSInputFile(gif_path)
         caption =f'''
